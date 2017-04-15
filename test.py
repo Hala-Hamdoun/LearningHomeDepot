@@ -11,7 +11,6 @@ def loadData(file):
     productTriples = []
     for product in lines:
         products.append(product.split(","));
-        productTriples.append([]);
     
     #Insert 0 Dates here
 
@@ -20,12 +19,15 @@ def loadData(file):
             date = product[i];
             product[i] = date.split("|");
             
-    for productNumber in range(len(productTriples)):
+    for productNumber in range(len(products)):
         product = products[productNumber];
         for i in range(len(product)-2):
-            productTriples[productNumber].append([product[i],product[i+1],product[i+2]]);
+            productTriples.append([product[i],product[i+1],product[i+2]]);
             
-    return productTriples[0];
+    return productTriples;
+
+#print(loadData('./TimeSeriesPredictionTrain.csv'));
+
 
 def printRow(file, row):
     csvFile=open(file)
@@ -63,5 +65,24 @@ def dateParser
 
 
 
+def getFeatureResultFormat(productTriples):
+    features = []; #[two days ago views][one day ago views]
+    classifications = [] # [third day views];
+
+    for triple in productTriples:
+        if(len(triple) == 3):        
+            twoAgo = triple[0][1]        
+            oneAgo = triple[1][1];        
+            features.append([twoAgo, oneAgo]);
+            classifications.append([triple[2][1]]);
+
+    return features, classifications;
+
+#trips = loadData('./TimeSeriesPredictionTrain.csv');
+#features, classes = getFeatureResultFormat(trips)
+#print(trips[-1]);
+#print("Features: " + str(features[-1]) + " class: " + str(classes[-1]));
+
+
 print( numDates( './TimeSeriesPredictionTrain.csv' ) );
-#print( printRow('./TimeSeriesPredictionTrain.csv', 1 ) );
+#print( printRow('./TimeSeriesPredictionTrain.csv', 0 ) );
