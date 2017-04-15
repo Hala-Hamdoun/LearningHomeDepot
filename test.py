@@ -13,6 +13,14 @@ def loadData(file):
         products.append(product.split(","));
         productTriples.append([]);
     
+    //Insert 0 Dates here
+
+    for product in products:
+        for i in range(len(product)):
+            date = product[i];
+            product[i] = date.split("|");
+            
+
     for productNumber in range(len(productTriples)):
         product = products[productNumber];
         for i in range(len(product)-2):
