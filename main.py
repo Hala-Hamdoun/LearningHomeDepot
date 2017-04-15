@@ -15,7 +15,11 @@ def getFeatureResultFormat(productTriples):
             threeAgo = float(triple[1][1])
             twoAgo   = float(triple[2][1])
             oneAgo   = float(triple[3][1])
-            features.append([fourAgo, threeAgo, twoAgo, oneAgo]);
+            fourAgoDate = float(triple[0][0]);
+            threeAgoDate = float(triple[1][0]);
+            twoAgoDate = float(triple[2][0]);
+            oneAgoDate = float(triple[3][0]);
+            features.append([fourAgo, threeAgo, twoAgo, oneAgo, fourAgoDate, threeAgoDate, twoAgoDate, oneAgoDate]);
             classifications.append(float(triple[4][1]));
 #        if(len(triple) == 3):        
 #            twoAgo = float(triple[0][1])
@@ -25,7 +29,7 @@ def getFeatureResultFormat(productTriples):
 #            arr = [0 for x in range(1,15000)];
 #            arr[int(triple[2][1])] = 1;
 #            classifications.append(arr);
-
+    print("MAAAXXXX" + max);
     return features, classifications;
 
 def splitTestTrain(features, classes, breakPercent):
@@ -56,22 +60,14 @@ train, test = splitTestTrain(features, classes, .8);
 Xtr, Ytr = train;
 Xte, Yte = test;
 
-print(Xte);
-
 Xtr = np.asarray(Xtr);
-print(Xtr);
 Xte = np.asarray(Xte);    
-print(Xte);
 Ytr = np.asarray(Ytr);
-print(Ytr);
 Yte = np.asarray(Yte);
-print(Yte);
-
-print(Xte);
 
 # tf Graph Input
-xtr = tf.placeholder("float", [None, 4])
-xte = tf.placeholder("float", [4])
+xtr = tf.placeholder("float", [None, 8])
+xte = tf.placeholder("float", [8])
 
 # Nearest Neighbor calculation using L1 Distance
 # Calculate L1 Distance
