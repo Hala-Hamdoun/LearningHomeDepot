@@ -1,3 +1,6 @@
+#Helper Functions
+
+
 def loadData(file):
     csvFile=open(file)
     lines=csvFile.read().splitlines()
@@ -8,6 +11,8 @@ def loadData(file):
         products.append(product.split(","));
     
     #Insert 0 Dates here
+    for i in range ( 0, len( products ) ):
+        products[i] = dateParser( products[i] )
 
     for product in products:
         for i in range(len(product)):

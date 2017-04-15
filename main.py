@@ -74,17 +74,7 @@ with tf.Session() as sess:
            "True Class:", Yte[i])
 
         # Calculate accuracy
-        if Ytr[nn_index] == (Yte[i]):
+        if ( Ytr[nn_index] <= (Yte[i] + 5) and Ytr[nn_index] >= (Yte[i] - 5) ):
             accuracy += 1./len(Xte)
     print("Done!")
-    print("Accuracy:", accuracy)
-
-
-
-
-
-
-
-
-
-
+    print("Accuracy (views within +-5):", accuracy)
