@@ -13,7 +13,7 @@ def loadData(file):
         products.append(product.split(","));
         productTriples.append([]);
     
-    //Insert 0 Dates here
+    #Insert 0 Dates here
 
     for product in products:
         for i in range(len(product)):
