@@ -9,15 +9,21 @@ def getFeatureResultFormat(productTriples):
     features = []; #[two days ago views][one day ago views]
     classifications = [] # [third day views];
 
+    date_weight = 1;
+    series_weight = 1;    
+
     for triple in productTriples:
         if(len(triple) == 5):        
-            fourAgo  = float(triple[0][1])
-            threeAgo = float(triple[1][1])
-            twoAgo   = float(triple[2][1])
-            oneAgo   = float(triple[3][1])
-            features.append([fourAgo, threeAgo, twoAgo, oneAgo]);
+            fourAgo  = float(triple[0][1])/10000 / series_weight
+            threeAgo = float(triple[1][1])/10000 / series_weight
+            twoAgo   = float(triple[2][1])/10000 / series_weight
+            oneAgo   = float(triple[3][1])/10000 / series_weight
+            fourAgoDate = float(triple[0][0])/365 / date_weight
+            threeAgoDate = float(triple[1][0])/365 / date_weight
+            twoAgoDate = float(triple[2][0])/365 / date_weight
+            oneAgoDate = float(triple[3][0])/365 / date_weight
+            features.append([fourAgo, threeAgo, twoAgo, oneAgo, fourAgoDate, threeAgoDate, twoAgoDate, oneAgoDate]);
             classifications.append(float(triple[4][1]));
-        # for varying k-value
         if(len(triple) == 3):        
             twoAgo = float(triple[0][1])
             oneAgo = float(triple[1][1]);        
@@ -176,13 +182,9 @@ def runWithKNeighbors(K):
 
 
     Xtr = np.asarray(Xtr);
-    print(Xtr);
-    Xte = np.asarray(Xte);    
-    print(Xte);
+    Xte = np.asarray(Xte);  
     Ytr = np.asarray(Ytr);
-    print(Ytr);
     Yte = np.asarray(Yte);
-    print(Yte);
 
     # tf Graph Input
     xtr = tf.placeholder("float", [None, 2])
@@ -223,3 +225,66 @@ def runWithKNeighbors(K):
                 accuracy += 1. / len(Xte)
         print("Done!")
         print("Accuracy:", accuracy)
+
+
+def runOneNeighbor():
+    trips = loadData('./TimeSeriesPredictionTrain.csv');
+    features, classes = getFeatureResultFormat(trips)
+    train, test = splitTestTrain(features, classes, .8);
+    Xtr, Ytr = train;
+    Xte, Yte = test;
+
+    Xtr = np.asarray(Xtr);
+    Xte = np.asarray(Xte);    
+    Ytr = np.asarray(Ytr);
+    Yte = np.asarray(Yte);
+
+    # tf Graph Input
+    xtr = tf.placeholder("float", [None, 8])
+    xte = tf.placeholder("float", [8])
+
+    # Nearest Neighbor calculation using L1 Distance
+    # Calculate L1 Distance
+    distance = tf.reduce_sum(tf.abs(tf.add(xtr, tf.negative(xte))), reduction_indices=1)
+    # Prediction: Get min distance index (Nearest neighbor)
+    pred = tf.arg_min(distance, 0)
+
+    accuracy = 0.
+    accuracy_percentage = 0.
+    mav = 0.
+
+    # Initializing the variables
+    init = tf.global_variables_initializer()
+
+    # Launch the graph
+    with tf.Session() as sess:
+        sess.run(init)
+
+        # loop over test data
+        for i in range(len(Xte)):
+            # Get nearest neighbor
+            nn_index = sess.run(pred, feed_dict={xtr: Xtr, xte: Xte[i, :]})
+            # Get nearest neighbor class label and compare it to its true label
+            ##print("Test", i, "Prediction:", np.argmax(Ytr[nn_index]), \
+            ##   "True Class:", np.argmax(Yte[i]))
+            #if (Yte[i] == 0 ):
+             #   print("Test", i, "Prediction:", Ytr[nn_index], \
+              #     "True Class:", Yte[i])
+               # print( Xte[i], Yte[i]);
+
+            # Calculate accuracy
+            # TODO: make this work on a percentage
+            if ( Ytr[nn_index] <= (Yte[i] + 5) and Ytr[nn_index] >= (Yte[i] - 5) ):
+                accuracy += 1./len(Xte)
+            if ( Ytr[nn_index] <= (Yte[i] * 1.15) and Ytr[nn_index] >= (Yte[i] * .85) ):
+                accuracy_percentage += 1./len(Xte)
+            mav += abs( Ytr[nn_index] - (Yte[i]) )
+
+  #      print("Done!")
+ #       print("Accuracy (views within +-5):", accuracy)
+#        print("Accuracy (views within 15%):", accuracy_percentage)
+        print("MAE:", (mav / len( Xte ) ) );
+
+
+for i in range(10):
+    runOneNeighbor();
