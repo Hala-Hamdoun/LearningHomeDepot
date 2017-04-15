@@ -92,7 +92,7 @@ with tf.Session() as sess:
         # Get nearest neighbor class label and compare it to its true label
         ##print("Test", i, "Prediction:", np.argmax(Ytr[nn_index]), \
         ##   "True Class:", np.argmax(Yte[i]))
-        if (Yte[i] == 0 ):
+        if (Yte[i] >= 6000 ):
             print("Test", i, "Prediction:", Ytr[nn_index], \
                "True Class:", Yte[i])
             print( Xte[i], Yte[i]);
