@@ -60,10 +60,20 @@ def getFeatureResultFormat(productTriples):
 
     return features, classifications;
 
-#trips = loadData('./TimeSeriesPredictionTrain.csv');
-#features, classes = getFeatureResultFormat(trips)
-#print(trips[-1]);
-#print("Features: " + str(features[-1]) + " class: " + str(classes[-1]));
+def splitTestTrain(features, classes, breakPercent):
+    if len(features) != len(classes):
+        print("BIG PROBLEM, YUUGE");
+        return;
+    
+    breakPoint = round(len(features) * breakPercent);
+    return [features[0:breakPoint], classes[0:breakPoint]],[features[breakPoint:],classes[breakPoint:]];
+
+    
+
+trips = loadData('./TimeSeriesPredictionTrain.csv');
+features, classes = getFeatureResultFormat(trips)
+train, test = splitTestTrain(features, classes, .8);
+print(train);
         
     
     
