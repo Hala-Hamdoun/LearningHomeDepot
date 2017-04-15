@@ -7,11 +7,11 @@ def loadData(file):
     csvFile=open(file)
     lines=csvFile.read().splitlines()
     csvFile.close()
-    products = [[] * len(lines)];
+    products = [];
    
     for product in lines:
-        products.push(product.split(","));
+        products.append(product.split(","));
         
-    return splitLines;
+    return products[0][0];
 
 print(loadData('./TimeSeriesPredictionTrain.csv'));
