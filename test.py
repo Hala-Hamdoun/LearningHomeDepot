@@ -45,7 +45,25 @@ def printRow(file, row):
 
     return return_row
 
-#print( printRow('./TimeSeriesPredictionTrain.csv', 0 ) );
+def numDates(file):
+    csvFile=open(file)
+    lines=csvFile.read().splitlines()
+    csvFile.close()
+    products = [];
+
+    for product in lines:
+        products.append(product.split(","));
+        
+    return_row = [];
+
+    for i in range( 0, len( products ) ):
+        return_row.append( len(products[i]) );
+
+    return return_row
+
+def dateParser
+
+
 
 def getFeatureResultFormat(productTriples):
     features = []; #[two days ago views][one day ago views]
@@ -84,11 +102,5 @@ xTe, yTe = test;
 
 
 
-
-
-
-
-
-
-
-
+print( numDates( './TimeSeriesPredictionTrain.csv' ) );
+#print( printRow('./TimeSeriesPredictionTrain.csv', 0 ) );
