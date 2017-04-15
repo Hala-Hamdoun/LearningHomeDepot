@@ -10,19 +10,19 @@ def loadData(file):
     for product in lines:
         products.append(product.split(","));
     
-    #Insert 0 Dates here
+    #parses the dates to add zeroes for non-existent dates
     for i in range ( 0, len( products ) ):
         products[i] = dateParser( products[i] )
 
     for product in products:
         for i in range(len(product)):
-            date = product[i];
-            product[i] = date.split("|");
+            if( product[i] ):
+                product[i] = product[i].split("|");
             
     for productNumber in range(len(products)):
         product = products[productNumber];
-        for i in range(len(product)-2):
-            productTriples.append([product[i],product[i+1],product[i+2]]);
+        for i in range(len(product)-4):
+            productTriples.append([product[i],product[i+1],product[i+2],product[i+3],product[i+4]]);
             
     return productTriples;
 
