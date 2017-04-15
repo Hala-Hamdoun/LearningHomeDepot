@@ -20,13 +20,14 @@ def loadData(file):
             date = product[i];
             product[i] = date.split("|");
             
-
     for productNumber in range(len(productTriples)):
         product = products[productNumber];
         for i in range(len(product)-2):
             productTriples[productNumber].append([product[i],product[i+1],product[i+2]]);
             
-
     return productTriples[0];
 
 print(loadData('./TimeSeriesPredictionTrain.csv'));
+
+
+
