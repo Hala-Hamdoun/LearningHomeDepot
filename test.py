@@ -61,9 +61,22 @@ def numDates(file):
 
     return return_row
 
-def dateParser
+#takes the datestring and converts it to a number representing the day (1-365)
+#value on the right side is untouched ex: "2016-01-12|14" becomes "12|14"
+def dateParser(productArray):
+    monthOffset = [ 0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 ];
+    parsed_array = [None] * 365;
 
+    for i in range( 0, 365 ):
+        if parsed_array[i] == None:
+            parsed_array[i] = str(i + 1) + "|0";
 
+    for i in range( 0, len( productArray ) ):
+        split_string = productArray[i].split('|');
+        numbers_string = split_string[0].split('-');
+        parsed_array[ monthOffset[ int( numbers_string[1] ) ] + int( numbers_string[2] ) - 1 ] = str( monthOffset[ int( numbers_string[1] ) ] + int( numbers_string[2] ) ) + '|' + split_string[1];
+
+    return parsed_array
 
 def getFeatureResultFormat(productTriples):
     features = []; #[two days ago views][one day ago views]
@@ -84,5 +97,6 @@ def getFeatureResultFormat(productTriples):
 #print("Features: " + str(features[-1]) + " class: " + str(classes[-1]));
 
 
-print( numDates( './TimeSeriesPredictionTrain.csv' ) );
+print( dateParser( printRow( './TimeSeriesPredictionTrain.csv', 5 ) ) );
+#print( numDates( './TimeSeriesPredictionTrain.csv' ) );
 #print( printRow('./TimeSeriesPredictionTrain.csv', 0 ) );
