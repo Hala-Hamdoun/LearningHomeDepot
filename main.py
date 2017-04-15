@@ -10,10 +10,10 @@ def getFeatureResultFormat(productTriples):
 
     for triple in productTriples:
         if(len(triple) == 3):        
-            twoAgo = triple[0][1]        
-            oneAgo = triple[1][1];        
+            twoAgo = float(triple[0][1])
+            oneAgo = float(triple[1][1]);        
             features.append([twoAgo, oneAgo]);
-            classifications.append(triple[2][1]);
+            classifications.append(float(triple[2][1]));
 
     return features, classifications;
 
@@ -30,7 +30,9 @@ features, classes = getFeatureResultFormat(trips)
 train, test = splitTestTrain(features, classes, .8);
 Xtr, Ytr = train;
 Xte, Yte = test;
-        
+
+print(Xte);
+
 Xtr = np.asarray(Xtr);
 print(Xtr);
 Xte = np.asarray(Xte);    
@@ -39,6 +41,8 @@ Ytr = np.asarray(Ytr);
 print(Ytr);
 Yte = np.asarray(Yte);
 print(Yte);
+
+print(Xte);
 
 # tf Graph Input
 xtr = tf.placeholder("float", [None, 2])
@@ -64,11 +68,23 @@ with tf.Session() as sess:
         # Get nearest neighbor
         nn_index = sess.run(pred, feed_dict={xtr: Xtr, xte: Xte[i, :]})
         # Get nearest neighbor class label and compare it to its true label
-        '''print("Test", i, "Prediction:", np.argmax(Ytr[nn_index]), \
-            "True Class:", np.argmax(Yte[i]))'''
+        ##print("Test", i, "Prediction:", np.argmax(Ytr[nn_index]), \
+        ##   "True Class:", np.argmax(Yte[i]))
+        print("Test", i, "Prediction:", Ytr[nn_index], \
+           "True Class:", Yte[i])
+
         # Calculate accuracy
-        if np.argmax(Ytr[nn_index]) == np.argmax(Yte[i]):
+        if Ytr[nn_index] == (Yte[i]):
             accuracy += 1./len(Xte)
     print("Done!")
     print("Accuracy:", accuracy)
+
+
+
+
+
+
+
+
+
 
