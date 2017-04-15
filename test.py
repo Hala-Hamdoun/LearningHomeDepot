@@ -14,4 +14,20 @@ def loadData(file):
         
     return products[0][0];
 
-print(loadData('./TimeSeriesPredictionTrain.csv'));
+def printRow(file, row):
+    csvFile=open(file)
+    lines=csvFile.read().splitlines()
+    csvFile.close()
+    products = [];
+   
+    for product in lines:
+        products.append(product.split(","));
+        
+    return_row = [];
+
+    for i in range( 0, len( products[row] ) ):
+        return_row.append( products[row][i] );
+
+    return return_row
+
+print( printRow('./TimeSeriesPredictionTrain.csv', 0 ) );
