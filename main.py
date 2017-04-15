@@ -49,9 +49,13 @@ Xte, Yte = test;
 print(Xte);
 
 Xtr = np.asarray(Xtr);
+print(Xtr);
 Xte = np.asarray(Xte);    
+print(Xte);
 Ytr = np.asarray(Ytr);
+print(Ytr);
 Yte = np.asarray(Yte);
+print(Yte);
 
 print(Xte);
 
