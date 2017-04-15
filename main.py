@@ -3,6 +3,7 @@ from helperFunctions import *
 
 import numpy as np
 import tensorflow as tf
+import random;
 
 def getFeatureResultFormat(productTriples):
     features = []; #[two days ago views][one day ago views]
@@ -22,8 +23,22 @@ def splitTestTrain(features, classes, breakPercent):
         print("BIG PROBLEM, YUUGE");
         return;
     
-    breakPoint = int(len(features) * breakPercent);
-    return [features[0:breakPoint], classes[0:breakPoint]],[features[breakPoint:],classes[breakPoint:]];
+    randIndexes = random.sample(range(0, len(features)), len(features))
+    
+    Xtr=[];
+    Xte=[]
+    Ytr=[]
+    Yte = [];
+
+    for index in randIndexes:
+        if(len(Xtr) <= int(len(features) * .8)):
+            Xtr.append(features[index]);
+            Ytr.append(classes[index]);
+        else:
+            Xte.append(features[index])
+            Yte.append(classes[index])
+
+    return [Xtr,Ytr],[Xte,Yte];
 
 trips = loadData('./TimeSeriesPredictionTrain.csv');
 features, classes = getFeatureResultFormat(trips)
@@ -70,7 +85,7 @@ with tf.Session() as sess:
            "True Class:", Yte[i])
 
         # Calculate accuracy
-        if Ytr[nn_index] == (Yte[i]):
+        if Ytr[nn_index] == (Yte[i]):#Do this as a percent?
             accuracy += 1./len(Xte)
     print("Done!")
     print("Accuracy:", accuracy)
