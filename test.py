@@ -7,10 +7,11 @@ def loadData(file):
     csvFile=open(file)
     lines=csvFile.read().splitlines()
     csvFile.close()
-    splitLines=[]
-    for line in lines:
-        splitLines+=[line.split(',')]
-    
+    products = [[] * len(lines)];
+   
+    for product in lines:
+        products.push(product.split(","));
+        
     return splitLines;
 
-print(loadData('../data/TimeSeriesPredictionTrain.csv'));
+print(loadData('./TimeSeriesPredictionTrain.csv'));
