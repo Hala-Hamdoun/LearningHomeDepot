@@ -107,10 +107,14 @@ train, test = splitTestTrain(features, classes, .8);
 Xtr, Ytr = train;
 Xte, Yte = test;
         
-    
+Xtr = np.asarray(Xtr);
+Xte = np.asarray(Xte);    
+Ytr = np.asarray(Ytr);
+Yte = np.asarray(Yte);
+
 # tf Graph Input
-xtr = tf.placeholder("float", [None, 784])
-xte = tf.placeholder("float", [784])
+xtr = tf.placeholder("float", [None, 2])
+xte = tf.placeholder("float", [2])
 
 # Nearest Neighbor calculation using L1 Distance
 # Calculate L1 Distance
